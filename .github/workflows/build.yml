@@ -1,0 +1,17 @@
+name: Build FreeBSD Binary
+on: [workflow_dispatch] # 允许你在网页上点击按钮手动触发
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Run Cross-Compile
+        run: |
+          GOOS=freebsd GOARCH=amd64 go build -ldflags "-s -w" -o chisel_freebsd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: freebsd-binary
+          path: chisel_freebsd
